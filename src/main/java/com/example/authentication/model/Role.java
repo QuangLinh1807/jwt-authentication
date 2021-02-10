@@ -1,7 +1,8 @@
-package com.example.authentication.jwt;
+package com.example.authentication.model;
 
 public enum Role {
-	ROLE_USER(1), ROLE_ADMIN(2);
+
+	ROLE_ADMIN(1), ROLE_USER(2);
 
 	private final int roleNumber;
 
@@ -12,5 +13,5 @@ public enum Role {
 	public int getRoleNumber() {
 		return roleNumber;
 	}
-	
+
 }

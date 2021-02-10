@@ -12,21 +12,20 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-@Component
-public class JwtRequestFilter extends OncePerRequestFilter {
+import com.example.authentication.model.User;
 
-	private JwtTokenComponent jwtTokenComponent;
-	private UserDetailsService userDetailsService;
+@Component
+public class JWTRequestFilter extends OncePerRequestFilter {
+
+	private JWTTokenComponent jwtTokenComponent;
 
 	@Autowired
-	public JwtRequestFilter(JwtTokenComponent jwtTokenComponent, UserDetailsService userDetailsService) {
+	public JWTRequestFilter(JWTTokenComponent jwtTokenComponent) {
 		this.jwtTokenComponent = jwtTokenComponent;
-		this.userDetailsService = userDetailsService;
 	}
 
 	@Override
@@ -38,7 +37,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			String userName = jwtTokenComponent.getUserNameFromToken(jwtToken);
 			SecurityContext securityContext = SecurityContextHolder.getContext();
 			if (userName != null && securityContext.getAuthentication() == null) {
-				UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+				User user = new User();
+				user.setUsername(userName);
+				user.setRoles(jwtTokenComponent.getRolesFromToken(jwtToken));
+				UserDetails userDetails = JWTUserDetailsFactory.create(user);
 				if (jwtTokenComponent.validateToken(jwtToken, userDetails)) {
 					UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 							userDetails, null, userDetails.getAuthorities());

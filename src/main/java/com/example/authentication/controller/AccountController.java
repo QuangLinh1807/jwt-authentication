@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.authentication.dto.AuthenticationRequestDTO;
 import com.example.authentication.dto.ChangePasswordDTO;
 import com.example.authentication.dto.CreateUserDTO;
-import com.example.authentication.dto.JwtResponseDTO;
+import com.example.authentication.dto.JWTResponseDTO;
 import com.example.authentication.dto.MessageDTO;
 import com.example.authentication.dto.UserDTO;
-import com.example.authentication.jwt.JwtTokenComponent;
-import com.example.authentication.jwt.JwtUserDetailsService;
+import com.example.authentication.jwt.JWTTokenComponent;
+import com.example.authentication.jwt.JWTUserDetailsService;
 import com.example.authentication.model.User;
 import com.example.authentication.service.UserService;
 import com.example.authentication.transform.UserTransform;
@@ -38,13 +38,13 @@ public class AccountController {
 	private UserService userService;
 	private BCryptPasswordEncoder passwordEncoder;
 	private AuthenticationManager authenticationManager;
-	private JwtTokenComponent jwtTokenComponent;
-	private JwtUserDetailsService jwtUserDetailsService;
+	private JWTTokenComponent jwtTokenComponent;
+	private JWTUserDetailsService jwtUserDetailsService;
 
 	@Autowired
 	public AccountController(DateFormat dateFormat, UserService userService, BCryptPasswordEncoder passwordEncoder,
 			MessageSource messageSource, AuthenticationManager authenticationManager,
-			JwtTokenComponent jwtTokenComponent, JwtUserDetailsService jwtUserDetailsService) {
+			JWTTokenComponent jwtTokenComponent, JWTUserDetailsService jwtUserDetailsService) {
 		this.messageSource = messageSource;
 		this.dateFormat = dateFormat;
 		this.userService = userService;
@@ -55,12 +55,12 @@ public class AccountController {
 	}
 
 	@PostMapping("/authenticate")
-	public ResponseEntity<JwtResponseDTO> authenticate(@RequestBody AuthenticationRequestDTO dto) {
+	public ResponseEntity<JWTResponseDTO> authenticate(@RequestBody AuthenticationRequestDTO dto) {
 		authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
 		UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(dto.getUsername());
 		String token = jwtTokenComponent.generateToken(userDetails);
-		return ResponseEntity.ok(new JwtResponseDTO(token));
+		return ResponseEntity.ok(new JWTResponseDTO(token));
 	}
 
 	@PostMapping

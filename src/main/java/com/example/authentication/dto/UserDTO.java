@@ -2,7 +2,7 @@ package com.example.authentication.dto;
 
 import java.util.List;
 
-import com.example.authentication.jwt.Role;
+import com.example.authentication.model.Role;
 
 public class UserDTO {
 

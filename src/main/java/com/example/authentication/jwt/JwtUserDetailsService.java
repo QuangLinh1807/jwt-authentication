@@ -9,22 +9,21 @@ import com.example.authentication.model.User;
 import com.example.authentication.service.UserService;
 
 @Service
-public class JwtUserDetailsService implements UserDetailsService {
+public class JWTUserDetailsService implements UserDetailsService {
 
 	private UserService userService;
 
-	public JwtUserDetailsService(UserService userService) {
+	public JWTUserDetailsService(UserService userService) {
 		this.userService = userService;
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userService.findByUsername(username);
-
-		if (user == null) {
-			throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username));
-		} else {
-			return JwtUserFactory.create(user);
+		try {
+			User user = userService.findByUsername(username);
+			return JWTUserDetailsFactory.create(user);
+		} catch (Exception e) {
+			throw new UsernameNotFoundException(String.format("No user found with username '%s'.", username), e);
 		}
 	}
 }

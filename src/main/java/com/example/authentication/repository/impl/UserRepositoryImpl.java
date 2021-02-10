@@ -37,7 +37,7 @@ public class UserRepositoryImpl implements UserRepository {
 		criteriaQuery.select(root).where(equal);
 		Query<User> query = session.createQuery(criteriaQuery);
 		List<User> users = query.getResultList();
-		if (users.size() > 0) {
+		if (users.size() > 0 && users.get(0) != null) {
 			return users.get(0);
 		}
 		throw new RuntimeException("User not found");

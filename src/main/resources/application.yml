@@ -1,10 +1,10 @@
 
 spring:
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    password: root
     url: jdbc:mysql://localhost:3306/authentication
     username: root
+    password: root
+    driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
@@ -29,4 +29,5 @@ logging:
             sql: trace
 
 jwt:
-  secret: java-rest-api_jwt-authentication
+  secret: spring-boot-jwt-authentication
+  lifetime: 7200  # 2 hours

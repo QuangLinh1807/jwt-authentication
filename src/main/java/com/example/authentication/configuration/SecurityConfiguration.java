@@ -15,21 +15,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.authentication.jwt.JwtAuthenticationEntryPoint;
-import com.example.authentication.jwt.JwtRequestFilter;
+import com.example.authentication.jwt.JWTAuthenticationEntryPoint;
+import com.example.authentication.jwt.JWTRequestFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	private JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	private UserDetailsService userDetailsService;
-	private JwtRequestFilter jwtRequestFilter;
+	private JWTRequestFilter jwtRequestFilter;
 
 	@Autowired
-	public SecurityConfiguration(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-			UserDetailsService userDetailsService, JwtRequestFilter jwtRequestFilter) {
+	public SecurityConfiguration(JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+			UserDetailsService userDetailsService, JWTRequestFilter jwtRequestFilter) {
 		this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
 		this.userDetailsService = userDetailsService;
 		this.jwtRequestFilter = jwtRequestFilter;

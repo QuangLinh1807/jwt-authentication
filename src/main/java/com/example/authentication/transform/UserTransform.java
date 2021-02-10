@@ -2,20 +2,19 @@ package com.example.authentication.transform;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.example.authentication.dto.CreateUserDTO;
 import com.example.authentication.dto.UserDTO;
-import com.example.authentication.jwt.Role;
 import com.example.authentication.model.User;
 
 public class UserTransform {
 
 	private DateFormat dateFormat;
+	private RoleTransform roleTransform;
 
 	public UserTransform(DateFormat dateFormat) {
 		this.dateFormat = dateFormat;
+		roleTransform = new RoleTransform();
 	}
 
 	public User apply(CreateUserDTO dto) throws ParseException {
@@ -26,14 +25,7 @@ public class UserTransform {
 		user.setFirstname(dto.getFirstname());
 		user.setLastname(dto.getLastname());
 		user.setActive(true);
-		List<Role> roles = dto.getRoles();
-		if (roles != null && roles.size() > 0) {
-			int roleNumber = 0;
-			for (Role r : roles) {
-				roleNumber += r.getRoleNumber();
-			}
-			user.setRoles(roleNumber);
-		}
+		user.setRoles(roleTransform.apply(dto.getRoles()));
 		user.setDob(dateFormat.parse(dto.getDob()));
 
 		return user;
@@ -48,16 +40,7 @@ public class UserTransform {
 		if (user.getDob() != null) {
 			dto.setDob(dateFormat.format(user.getDob()));
 		}
-
-		int roleNumber = user.getRoles();
-		List<Role> roles = new ArrayList<>();
-		Role[] roleNames = Role.values();
-		for (Role role : roleNames) {
-			if ((roleNumber & role.getRoleNumber()) > 0) {
-				roles.add(role);
-			}
-		}
-		dto.setRoles(roles);
+		dto.setRoles(roleTransform.apply(user.getRoles()));
 		dto.setActive(user.isActive());
 		return dto;
 	}

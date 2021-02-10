@@ -37,7 +37,7 @@ public class UserController {
 		UserTransform transform = new UserTransform(dateFormat);
 		List<User> users = userService.getAllUsers();
 		List<UserDTO> userDTOs = new ArrayList<>();
-		for (User u: users) {
+		for (User u : users) {
 			userDTOs.add(transform.apply(u));
 		}
 		return userDTOs;
